@@ -34,9 +34,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	// API Handlers
 	// Note: These are mounted under /api/ in main.go
-	mux.HandleFunc("POST /api/validate-email", s.EnableCORS(s.HandleValidateEmail))
-	mux.HandleFunc("POST /api/verify-code", s.EnableCORS(s.HandleVerifyCode))
-	mux.HandleFunc("POST /api/register", s.EnableCORS(s.HandleRegister))
+	mux.HandleFunc("/api/validate-email", s.EnableCORS(s.HandleValidateEmail))
+	mux.HandleFunc("/api/verify-code", s.EnableCORS(s.HandleVerifyCode))
+	mux.HandleFunc("/api/register", s.EnableCORS(s.HandleRegister))
 
 	return mux
 }
