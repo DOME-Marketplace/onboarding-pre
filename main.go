@@ -91,17 +91,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	srv := server.NewServer(dbService, issuanceService, mailService)
-
-	// Setup mux for Static Files and API
-	mux := http.NewServeMux()
-
-	// Static file serving from the generated directory
-	fileServer := http.FileServer(http.Dir(cfg.DestDir))
-	mux.Handle("/", fileServer)
-
-	// API Handlers (delegated to srv.Routes())
-	mux.Handle("/api/", srv.RegisterRoutes())
+	srv := server.NewServer(dbService, issuanceService, mailService, cfg.DestDir)
 
 	// Start Watcher if requested
 	if *watchFlag {
@@ -110,7 +100,7 @@ func main() {
 
 	// Start Server
 	slog.Info("🚀 Server running", "env", *envFlag, "dir", cfg.DestDir, "url", "https://onboarddev.dome.mycredential.eu")
-	if err := http.ListenAndServe(":"+*port, mux); err != nil {
+	if err := http.ListenAndServe(":"+*port, srv.Handler); err != nil {
 		slog.Error("Server failed", "error", err)
 		os.Exit(1)
 	}
